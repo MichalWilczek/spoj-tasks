@@ -1,0 +1,96 @@
+
+/*
+JPESEL - Pesel
+Jan Kowalski musi wpisaÊ do systemu szpitalnego dane osobowe pacjenta,
+oprÛcz imienia i nazwiska musi rÛwnieø wpisaÊ PESEL pacjenta. Jakieø
+by≥o jego zdziwienie, gdy spostrzeg≥, øe pewnych pacjentÛw system nie
+przyjmowa≥ z powodu wadliwego PESELu.
+
+Twoim zadaniem jest sprawdzenie, czy podana liczba 11-cyfrowa jest
+poprawnym PESELem.
+
+Aby sprawdziÊ czy dany PESEL jest prawid≥owy naleøy wykonaÊ
+nastÍpujπce dzia≥ania:
+
+Pierwszπ cyfrÍ mnoøymy przez 1,
+drugπ cyfrÍ mnoøymy przez 3,
+trzeciπ cyfrÍ mnoøymy przez 7,
+czwarta cyfrÍ mnoøymy przez 9,
+piπtπ cyfrÍ mnoøymy przez 1,
+szÛstπ cyfrÍ mnoøymy przez 3,
+siÛdmπ cyfrÍ mnoøymy przez 7,
+Ûsmπ cyfrÍ mnoøymy przez 9,
+dziewiπtπ cyfrÍ mnoøymy przez 1,
+dziesiπtπ cyfrÍ mnoøymy przez 3,
+jedenastπ cyfrÍ mnoøymy przez 1.
+
+Tak uzyskane 11 iloczynÛw dodajemy do siebie. Jeúli ostatnia cyfra tej
+sumy jest zerem to podany PESEL jest prawid≥owy. Przyk≥ad dla numeru
+PESEL 44051401458
+
+4*1 + 4*3 + 0*7 + 5*9 + 1*1 + 4*3 + 0*7 + 1*9 + 4*1 + 5*3 + 8*1 =
+4 + 12 + 0 + 45 + 1 + 12 + 0 + 9 + 4 + 15 + 8 = 110
+
+èrÛd≥o: www.wikipedia.pl
+
+Jeúli suma jest wiÍksza od zera, wtedy sprawdzamy jej poprawnoúÊ. W
+przeciwnym przypadku nr PESEL jest b≥Ídny. Poniewaø ostatnia cyfra
+liczby 110 jest zerem wiÍc podany PESEL jest prawid≥owy.
+
+Na wejúciu podana jest w pojedyÒczej linii iloúÊ t<=100 numerÛw PESEL
+do sprawdzenia. W kolejnych t liniach sπ 11-cyfrowe liczby.
+
+Output
+W pojedyÒczej linii powinna zostaÊ wyúwietlona litera D, jeúli numer
+PESEL jest poprawny lub N, gdy nie.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int oblicz_sume_z_peselu(long long numer_pesel)
+{
+    long long wartosc_calkowita=numer_pesel;
+    int szyfr[11] = {1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1};
+    int pesel_cyfry[11];
+    int reszta;
+    int suma = 0;
+
+    for (int i=10; i>=0; i--)
+    {
+        reszta = wartosc_calkowita%10;
+        pesel_cyfry[i] = reszta;
+        wartosc_calkowita = (wartosc_calkowita - reszta)/10;
+        suma += szyfr[i]*pesel_cyfry[i];
+    }
+
+    return suma;
+}
+
+void sprawdz_poprawnosc_numeru_pesel(int suma_numer_pesel)
+{
+    if (suma_numer_pesel%10 == 0)
+    {
+        cout << "D" << endl;
+    }
+    else
+    {
+        cout << "N" << endl;
+    }
+}
+
+int main()
+{
+    int ilosc_iteracji;
+    cin >> ilosc_iteracji;
+
+    long long numer_pesel;
+    for (int i=0; i< ilosc_iteracji; i++)
+    {
+        cin >> numer_pesel;
+        sprawdz_poprawnosc_numeru_pesel(oblicz_sume_z_peselu(numer_pesel));
+    }
+
+    return 0;
+}
